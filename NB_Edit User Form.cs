@@ -52,14 +52,34 @@ namespace HymanComm_NotebookApp
             {
                 var id = int.Parse(Id_lb.Text);
                 var user = _NBdb.UserLogins.FirstOrDefault(from => from.id == id);
+                var roleId = int.Parse(AccessLevel_cb.SelectedValue.ToString());
+                var isValid = true;
 
                 user.Firstname = Firstname_tb.Text;
                 user.Lastname = Lastname_tb.Text;
                 user.Username = Username_tb.Text;
-                //user.UserRoles = int.Parse(AccessLevel_cb.SelectedValueChanged(ToString));
+                user.Start_date = Start_Date.Value;
                 user.Promotion_date = Promo_Date.Value;
 
+                var userRole = user.UserRoles.FirstOrDefault();
+                user.UserRoles.Remove(userRole);
+
+                var newUserRole = new UserRole
+                {
+                    Roles_Id = roleId,
+                    Users_Id = user.id
+                };
+
+                user.UserRoles.Add(newUserRole);
+
                 
+
+                if (Promo_Date.Value <= Start_Date.Value)
+                {
+                    isValid = false;
+                    MessageBox.Show("Invalid date selected");
+                }
+
                 _NBdb.SaveChanges();
                 MessageBox.Show("User Updated!");
                 Close();

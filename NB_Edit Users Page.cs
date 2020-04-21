@@ -46,7 +46,9 @@ namespace HymanComm_NotebookApp
                 Firstname = from.Firstname,
                 Lastname = from.Lastname,
                 Status = from.isActive,
-                DateStarted = from.Start_date
+                DateStarted = from.Start_date,
+                
+                
             }).ToList();
 
             //Rename column names
@@ -58,7 +60,6 @@ namespace HymanComm_NotebookApp
             gv_UserList.Columns[4].HeaderText = "ACTIVE STATUS";
             gv_UserList.Columns[5].HeaderText = "DATE STARTED";
         }
-
 
         private void EditUserCredentials_btn_Click(object sender, EventArgs e)
         {
@@ -95,8 +96,8 @@ namespace HymanComm_NotebookApp
             var user = _NBdb.UserLogins.FirstOrDefault(from => from.id == id);
 
             _NBdb.UserLogins.Remove(user);
-            gv_UserList.Refresh();
             _NBdb.SaveChanges();
+            MessageBox.Show($"{user.Username}'s has been deleted!");
         }
 
         //Search for user

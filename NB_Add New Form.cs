@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,14 +35,16 @@ namespace HymanComm_NotebookApp
         {
             try
             {
+                SHA256 sha = SHA256.Create();
+
                 var firstname = Firstname_tb.Text;
                 var lastname = Lastname_tb.Text;
                 var username = Username_tb.Text;
                 var password = Password_tb.Text;
                 var rolesId = (int)AccessLevel_cb.SelectedValue;
-                var startDate = Date_Started.Text;
-                var promodate = Promo_Date.Text;
+                var startDate = Date_Started.Value;
                 var isValid = true;
+                
 
 
 
@@ -63,15 +66,24 @@ namespace HymanComm_NotebookApp
                     MessageBox.Show("Missing Information (Start Date)");
                 }
 
+                /*if (promodate > startDate)
+                {
+                    isValid = false;
+                    MessageBox.Show("Invalid date selected");
+                }*/
+
                 if(isValid == true)
                 {
+                    var hashed_password = Utils.HashPassword(Password_tb.Text);
+
                     var user = new UserLogin
                     {
                         Firstname = Firstname_tb.Text,
                         Lastname = Lastname_tb.Text,
                         Username = Username_tb.Text,
-                        Password = Password_tb.Text,
+                        Password = hashed_password,
                         Start_date = Date_Started.Value,
+                        isActive = true,
                     };
 
                     _NBdb.UserLogins.Add(user);
@@ -80,10 +92,10 @@ namespace HymanComm_NotebookApp
                     var userid = user.id;
                     var userRole = new UserRole
                     {
-
                         Roles_Id = rolesId,
                         Users_Id = userid,
                     };
+                    
 
                     _NBdb.UserRoles.Add(userRole);
                     _NBdb.SaveChanges();

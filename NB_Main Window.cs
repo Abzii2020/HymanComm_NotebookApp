@@ -56,8 +56,8 @@ namespace HymanComm_NotebookApp
         {
             if(_roleName != "A1")
             {
-                EditUser_btn.Enabled = false;
-                AddNewUser_btn.Enabled = false;
+                EditUser_btn.Visible = false;
+                AddNewUser_btn.Visible = false;
             }
                        
             var username = _userLogin.Username;

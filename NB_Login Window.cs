@@ -13,11 +13,14 @@ namespace HymanComm_NotebookApp
 {
     public partial class NB_LoginScreen : Form
     {
-        private readonly HymanComm_NotebookAppEntities _db;
+        private readonly HymanComm_NotebookAppEntities _NBdb;
+        //private string username;
+        //private string hashed_password;
+
         public NB_LoginScreen()
         {
             InitializeComponent();
-            _db = new HymanComm_NotebookAppEntities();
+            _NBdb = new HymanComm_NotebookAppEntities();
         }
 
         private void LoginWin_btn_Click(object sender, EventArgs e)
@@ -41,7 +44,7 @@ namespace HymanComm_NotebookApp
 
                 var hashed_password = Utils.HashPassword(password);
 
-                var user = _db.UserLogins.FirstOrDefault(q => q.Username == username && 
+                var user = _NBdb.UserLogins.FirstOrDefault(q => q.Username == username && 
                 q.Password == hashed_password && q.isActive == true);
                 
                 if (user == null)
@@ -57,7 +60,7 @@ namespace HymanComm_NotebookApp
                     Hide();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show("Something went wrong. Please try again");
                 //throw;
